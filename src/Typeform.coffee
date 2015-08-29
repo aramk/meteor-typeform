@@ -40,6 +40,7 @@ Typeform =
     @_handleHttpResponse(df, 'crating typeform')
 
   delete: (data) ->
+    df = Q.defer()
     urls = @getUrlsFromData(data)
     HTTP.del Paths.join(urls.self), {
       headers: @_getHeaders()
