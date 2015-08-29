@@ -15,7 +15,7 @@ Package.onUse(function (api) {
     'aramk:utility@0.10.0'
   ], ['client', 'server']);
   api.imply('iron:router');
-  api.export('Routes', 'client');
+  api.export('Typeform', ['client', 'server']);
   api.addFiles([
     'src/Typeform.coffee'
   ], ['client', 'server']);
