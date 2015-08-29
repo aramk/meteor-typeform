@@ -10,8 +10,9 @@ Package.onUse(function (api) {
   api.versionsFrom('METEOR@0.9.0');
   api.use([
     'coffeescript',
-    'underscore',
     'http',
+    'templating',
+    'underscore',
     'aramk:utility@0.10.0'
   ], ['client', 'server']);
   api.imply('iron:router');
@@ -19,4 +20,7 @@ Package.onUse(function (api) {
   api.addFiles([
     'src/Typeform.coffee'
   ], ['client', 'server']);
+  api.addFiles([
+    'src/typeform.html'
+  ], ['client']);
 });
