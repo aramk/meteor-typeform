@@ -1,2 +1,3 @@
 # meteor-typeform
-Forms done awesomely in Meteor.
+
+Adapter for [typeform.io](http://typeform.io).
