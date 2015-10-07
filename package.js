@@ -13,12 +13,13 @@ Package.onUse(function (api) {
     'http',
     'templating',
     'underscore',
-    'aramk:utility@0.10.0'
+    'urbanetic:utility@1.0.1'
   ], ['client', 'server']);
   api.imply('iron:router');
   api.export('Typeform', ['client', 'server']);
   api.addFiles([
-    'src/Typeform.coffee'
+    'src/Typeform.coffee',
+    'src/TypeformIO.coffee'
   ], ['client', 'server']);
   api.addFiles([
     'src/typeform.html'
