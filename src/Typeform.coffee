@@ -17,7 +17,7 @@ Typeform =
     params =
       key: options.key
       completed: options.completed
-    # if options.since? then query.since = options.since
+    if options.since? then params.since = moment(options.since).unix()
     df = Q.defer()
     response = HTTP.get @_getDataUrl(id),
       params: params
