@@ -1,5 +1,6 @@
 # Sets up proxy endpoints for passing typeform requests through the Meteor server. This is
-# necessary when loading typeforms in iframes in order to detect when they have been submitted.
+# necessary when loading typeforms in iframes in order to detect when they have been submitted,
+# since the content of iframes cannot be observed unless it is loaded from the same host.
 
 HTTP.methods
 

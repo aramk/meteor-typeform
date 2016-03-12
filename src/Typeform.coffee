@@ -38,3 +38,25 @@ Typeform =
     promise = df.promise.then (result) -> result.data
     df.promise.fail (err) -> Logger.error 'Error:', action , err
     promise
+
+if Meteor.isClient then _.extend Typeform,
+  
+  whenSubmitted: (iframe) ->
+    df = Q.defer()
+    $iframe = $(iframe)
+    _.delay ->
+      intervalHandle = setInterval ->
+        # TODO(aramk) This fails sometimes because iframe contents are not defined.
+        try
+          iframeContents = $iframe.contents()
+        catch err
+          # Ignore and retry.
+          return
+        $outro = $('.outro', iframeContents)
+        $loader = $('#loader', iframeContents)
+        if !$loader.is(':visible') and $outro.is(':visible')
+          clearInterval(intervalHandle)
+          df.resolve()
+      , 1000
+    , 1000
+    df.promise

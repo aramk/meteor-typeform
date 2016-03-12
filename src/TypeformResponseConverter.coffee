@@ -21,6 +21,7 @@ class TypeformResponseConverter
           finish: @parseDate(metadata.date_submit).toDate()
         token: rawResponse.token
         formId: @settings.formId ? metadata.referer.match(/to\/(\w+)/)?[1]
+        data: rawResponse
       responses.push(response)
     responses
 

@@ -13,16 +13,17 @@ Package.onUse(function (api) {
     'http',
     'templating',
     'underscore',
+    'aramk:q@1.0.1_1',
     'urbanetic:utility@1.0.1',
     'urbanetic:bismuth-utility@0.2.1',
-    'cfs:http-methods@0.0.30'
+    'cfs:http-methods@0.0.30',
   ], ['client', 'server']);
   api.export([
     'TypeformResponseConverter',
-    'TypeformResponses'
+    'TypeformResponses',
+    'Typeform'
   ], ['client', 'server']);
   api.imply('iron:router');
-  api.export('Typeform', ['client', 'server']);
   api.addFiles([
     'src/Typeform.coffee',
     'src/TypeformIO.coffee',
