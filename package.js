@@ -17,11 +17,17 @@ Package.onUse(function (api) {
     'urbanetic:bismuth-utility@0.2.1',
     'cfs:http-methods@0.0.30'
   ], ['client', 'server']);
+  api.export([
+    'TypeformResponseConverter',
+    'TypeformResponses'
+  ], ['client', 'server']);
   api.imply('iron:router');
   api.export('Typeform', ['client', 'server']);
   api.addFiles([
     'src/Typeform.coffee',
-    'src/TypeformIO.coffee'
+    'src/TypeformIO.coffee',
+    'src/TypeformResponseConverter.coffee',
+    'src/TypeformResponses.coffee'
   ], ['client', 'server']);
   api.addFiles([
     'src/server.coffee'

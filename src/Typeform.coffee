@@ -10,6 +10,8 @@ Typeform =
     Setter.clone(@_config)
 
   getData: (id, options) ->
+    unless id
+      return Q.reject('ID not provided')
     options = Setter.merge
       key: @_getApiKey()
       completed: true
@@ -19,6 +21,7 @@ Typeform =
       completed: options.completed
     if options.since? then params.since = moment(options.since).unix()
     df = Q.defer()
+
     response = HTTP.get @_getDataUrl(id),
       params: params
     , Promises.toCallback(df)
