@@ -13,7 +13,9 @@ Package.onUse(function (api) {
     'http',
     'templating',
     'underscore',
-    'urbanetic:utility@1.0.1'
+    'urbanetic:utility@1.0.1',
+    'urbanetic:bismuth-utility@0.2.1',
+    'cfs:http-methods@0.0.30'
   ], ['client', 'server']);
   api.imply('iron:router');
   api.export('Typeform', ['client', 'server']);
@@ -22,6 +24,9 @@ Package.onUse(function (api) {
     'src/TypeformIO.coffee'
   ], ['client', 'server']);
   api.addFiles([
+    'src/server.coffee'
+  ], 'server');
+  api.addFiles([
     'src/typeform.html'
-  ], ['client']);
+  ], 'client');
 });
