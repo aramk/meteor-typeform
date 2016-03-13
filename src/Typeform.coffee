@@ -22,7 +22,9 @@ Typeform =
     if options.since? then params.since = moment(options.since).unix()
     df = Q.defer()
 
-    response = HTTP.get @_getDataUrl(id),
+    url = @_getDataUrl(id)
+    Logger.debug 'Getting typeform data', url
+    response = HTTP.get url,
       params: params
     , Promises.toCallback(df)
     @_handleHttpResponse(df, 'querying typeform data')

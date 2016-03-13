@@ -60,7 +60,11 @@ _.extend TypeformResponses,
       options = Setter.merge
         since: sinceDate
       , options
-    data = Promises.runSync -> Typeform.getData typeformId, options
+    try
+      data = Promises.runSync -> Typeform.getData typeformId, options
+    catch e
+      Logger.error(e)
+      return
     responses = options.getResponses(data, options)
     if _.isEmpty(responses)
       Logger.info 'No responses to sync'
@@ -73,6 +77,8 @@ _.extend TypeformResponses,
     _.each responses, (response) ->
       existing = TypeformResponses.findOne(token: response.token)
       return if existing
+      # Add userId if available
+      response.userId ?= response.data?.hidden?.user_id
       try
         ids.push TypeformResponses.insert(response)
       catch err
