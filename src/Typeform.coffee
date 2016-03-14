@@ -19,7 +19,8 @@ Typeform =
     params =
       key: options.key
       completed: options.completed
-    if options.since? then params.since = moment(options.since).unix()
+    if options.since?
+      params.since = Numbers.parse(options.since) || moment(options.since).unix()
     df = Q.defer()
 
     url = @_getDataUrl(id)
