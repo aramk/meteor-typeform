@@ -29,9 +29,9 @@ schema =
 
 # Only server can modify.
 TypeformResponses.allow
-  insert: false
-  update: false
-  remove: false
+  insert: -> false
+  update: -> false
+  remove: -> false
 
 _.extend TypeformResponses,
 
