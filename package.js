@@ -21,7 +21,8 @@ Package.onUse(function (api) {
   api.export([
     'TypeformResponseConverter',
     'TypeformResponses',
-    'Typeform'
+    'Typeform',
+    'TypeformIO'
   ], ['client', 'server']);
   api.imply('iron:router');
   api.addFiles([

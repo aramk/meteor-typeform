@@ -36,7 +36,7 @@ TypeformIO =
       data: formData
       headers: @_getHeaders()
     }, Promises.toCallback(df)
-    @_handleHttpResponse(df, 'crating typeform')
+    @_handleHttpResponse(df, 'creating typeform')
 
   delete: (data) ->
     df = Q.defer()
