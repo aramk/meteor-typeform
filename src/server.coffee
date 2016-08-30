@@ -14,8 +14,8 @@ HTTP.methods
     @addHeader('Content-Type', 'text/html')
     proxyTypeform.call(@, url)
 
-  # Token request on form load.
-  'app/form/result/token/:id/default': ->
+  # Token request on form load. :type can be 'default' or 'touch'.
+  'app/form/result/token/:id/:type': ->
     info = getRefererInfo.call(@)
     url = "https://#{info.username}.typeform.com/app/form/result/token/#{info.id}/default"
     proxyTypeform.call(@, url)
