@@ -16,19 +16,53 @@ Typeform =
       key: @_getApiKey()
       completed: true
     , options
-    params =
-      key: options.key
-      completed: options.completed
+    params = _.pick(options, 'key', 'completed', 'since', 'until', 'offset', 'limit', 'token',
+        'order_by', 'order_by[]')
     if options.since?
       params.since = Numbers.parse(options.since) || moment(options.since).unix()
     df = Q.defer()
 
     url = @_getDataUrl(id)
-    Logger.debug 'Getting typeform data', url
+    Logger.debug 'Getting typeform data', url, _.omit(params, 'key')
     response = HTTP.get url,
       params: params
     , Promises.toCallback(df)
     @_handleHttpResponse(df, 'querying typeform data')
+
+  # Returns a promise containing all the data from the API by making paginated calls, since
+  # Typeform won't return the full set of responses for large datasets.
+  getAllData: (id, options) ->
+    df = Q.defer()
+    options = Setter.merge
+      offset: 0
+      limit: 300
+    , options
+    
+    offset = options.offset
+    limit = options.limit
+
+    responses = []
+    firstResponse = null
+
+    getNextPage = =>
+      nextOptions = Setter.merge {}, options, {offset: offset}
+      @getData(id, nextOptions)
+        .then(Meteor.bindEnvironment((response) ->
+          firstResponse ?= response
+          responses.push(response.responses...)
+          showing = response.stats?.responses?.showing
+          if showing > 0
+            offset += showing
+            getNextPage()
+          else
+            firstResponse.responses = responses
+            firstResponse.stats?.responses?.showing = responses.length
+            df.resolve(firstResponse)
+        )).fail(df.reject).done()
+
+    getNextPage()
+    
+    df.promise
 
   _getDataUrl: (id) -> Paths.join(@_config.dataUrlPrefix, id)
 
