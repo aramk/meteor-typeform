@@ -40,6 +40,7 @@ Typeform =
     
     offset = options.offset
     limit = options.limit
+    totalLimit = options.totalLimit
 
     responses = []
     firstResponse = null
@@ -51,11 +52,14 @@ Typeform =
           firstResponse ?= response
           responses.push(response.responses...)
           showing = response.stats?.responses?.showing
-          if showing > 0
+          if showing > 0 and (!totalLimit? or responses.length < totalLimit)
             offset += showing
             getNextPage()
           else
-            firstResponse.responses = responses
+            if totalLimit?
+              firstResponse.responses = responses.slice(0, totalLimit)
+            else
+              firstResponse.responses = responses
             firstResponse.stats?.responses?.showing = responses.length
             df.resolve(firstResponse)
         )).fail(df.reject).done()
