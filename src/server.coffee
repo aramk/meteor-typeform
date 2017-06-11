@@ -39,6 +39,10 @@ HTTP.methods
       method: 'POST'
       form: strData
 
+  'bundles/quickyformapp/js/build/trackingClient.js': ->
+    info = getRefererInfo.call(@)
+    url = "https://#{info.username}.typeform.com#{@request.originalUrl}"
+    proxyTypeform.call(@, url)
 
 # Proxy request for Typeform to allow accessing the contents of iframes to determine when the
 # typeform has been submitted.
