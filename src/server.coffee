@@ -64,7 +64,7 @@ proxyTypeform = (url, options) ->
     writer = @createWriteStream()
     HTTP.call options.method, url, options, (err, result) =>
       if err
-        msg = "Failed to load typeform: #{id}"
+        msg = "Failed to load typeform"
         Logger.error(msg, err)
         writer.end(msg)
         return
