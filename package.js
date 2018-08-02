@@ -1,7 +1,7 @@
 // Meteor package definition.
 Package.describe({
   name: 'aramk:typeform',
-  version: '0.2.0',
+  version: '1.0.0',
   summary: 'Adapter for typeform.io.',
   git: 'https://github.com/aramk/meteor-typeform.git'
 });

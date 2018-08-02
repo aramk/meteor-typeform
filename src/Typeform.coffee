@@ -5,13 +5,15 @@ Typeform =
   config: (config) ->
     if !@_config? or config?
       @_config ?=
-        dataUrlPrefix: 'https://api.typeform.com/v0/form'
+        dataUrlPrefix: 'https://api.typeform.com/forms'
       Setter.merge(@_config, config)
     Setter.clone(@_config)
 
   getData: (id, options) ->
-    unless id
-      return Q.reject('ID not provided')
+    unless id? then return Q.reject('ID not provided')
+    accessToken = Meteor.settings?.typeform?.accessToken
+    unless accessToken? then return Q.reject('Access token not provided')
+
     options = Setter.merge
       key: @_getApiKey()
       completed: true
@@ -26,6 +28,8 @@ Typeform =
     Logger.debug 'Getting typeform data', url, _.omit(params, 'key')
     response = HTTP.get url,
       params: params
+      headers:
+        authorization: "bearer #{accessToken}"
     , Promises.toCallback(df)
     @_handleHttpResponse(df, 'querying typeform data')
 
@@ -68,7 +72,7 @@ Typeform =
     
     df.promise
 
-  _getDataUrl: (id) -> Paths.join(@_config.dataUrlPrefix, id)
+  _getDataUrl: (id) -> Paths.join(@_config.dataUrlPrefix, id, 'responses')
 
   _getApiKey: ->
     key = @_config.apiKey

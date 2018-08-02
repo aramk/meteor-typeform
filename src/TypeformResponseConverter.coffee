@@ -10,15 +10,15 @@ class TypeformResponseConverter
   #  * `data` - The typeform doc from the Data API.
   getResponses: (data) ->
     responses = []
-    _.each data.responses, (rawResponse) =>
+    _.each data.items, (rawResponse) =>
       # Ignore responses which aren't complete.
-      return unless rawResponse.completed == '1'
+      return unless rawResponse.submitted_at?
       # Ignore responses which are already stored.
       metadata = rawResponse.metadata
       response =
         dates:
-          start: @parseDate(metadata.date_land).toDate()
-          finish: @parseDate(metadata.date_submit).toDate()
+          start: @parseDate(rawResponse.landed_at).toDate()
+          finish: @parseDate(rawResponse.submitted_at).toDate()
         token: rawResponse.token
         formId: @settings.formId ? metadata.referer.match(/to\/(\w+)/)?[1]
         data: rawResponse
