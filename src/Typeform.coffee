@@ -97,7 +97,7 @@ if Meteor.isClient then _.extend Typeform,
         catch err
           # Ignore and retry.
           return
-        if !$('#loader', iframeContents).is(':visible') and $('[data-qa="thank-you-screen-visible"]', iframeContents).is(':visible')
+        if !$('#loader', iframeContents).is(':visible') and $('[data-qa*="thank-you-screen-visible"]', iframeContents).is(':visible')
           clearInterval(intervalHandle)
           df.resolve()
       , 1000
