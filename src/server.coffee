@@ -32,12 +32,13 @@ HTTP.methods
   # Form submit.
   'app/form/submit/:id': post: (data) ->
     info = getRefererInfo.call(@)
-    strData = data.toString()
+    # strData = data.toString()
     url = "https://#{info.username}.typeform.com/app/form/submit/#{info.id}"
     @addHeader('Content-Type', 'application/json')
     proxyTypeform.call @, url,
       method: 'POST'
-      form: strData
+      data: data
+      # form: strData
 
   'bundles/quickyformapp/js/build/attributionUtil.js': -> scriptProxy.apply(@, arguments)
   'bundles/quickyformapp/js/build/trackingClient.js': -> scriptProxy.apply(@, arguments)
