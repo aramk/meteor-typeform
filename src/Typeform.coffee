@@ -11,21 +11,21 @@ Typeform =
 
   getData: (id, options) ->
     unless id? then return Q.reject('ID not provided')
-    accessToken = Meteor.settings?.typeform?.accessToken
+
+    accessToken = @_getAccessToken()
     unless accessToken? then return Q.reject('Access token not provided')
 
     options = Setter.merge
-      key: @_getApiKey()
       completed: true
     , options
-    params = _.pick(options, 'key', 'completed', 'since', 'until', 'offset', 'limit', 'token',
+    params = _.pick(options, 'completed', 'since', 'until', 'offset', 'limit', 'token',
         'order_by', 'order_by[]')
     if options.since?
       params.since = Numbers.parse(options.since) || moment(options.since).unix()
     df = Q.defer()
 
     url = @_getDataUrl(id)
-    Logger.debug 'Getting typeform data', url, _.omit(params, 'key')
+    Logger.debug 'Getting typeform data', url, params
     response = HTTP.get url,
       params: params
       headers:
@@ -74,10 +74,7 @@ Typeform =
 
   _getDataUrl: (id) -> Paths.join(@_config.dataUrlPrefix, id, 'responses')
 
-  _getApiKey: ->
-    key = @_config.apiKey
-    unless key then throw new Error('API key not configured.')
-    key
+  _getAccessToken: -> Meteor.settings?.typeform?.accessToken
 
   _handleHttpResponse: (df, action) ->
     promise = df.promise.then (result) -> result.data
