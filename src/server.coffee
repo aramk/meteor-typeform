@@ -2,6 +2,8 @@
 # necessary when loading typeforms in iframes in order to detect when they have been submitted,
 # since the content of iframes cannot be observed unless it is loaded from the same host.
 
+{URLSearchParams} = Npm.require('url')
+
 HTTP.methods
 
   # Form load.
@@ -32,13 +34,27 @@ HTTP.methods
   # Form submit.
   'app/form/submit/:id': post: (data) ->
     info = getRefererInfo.call(@)
-    # strData = data.toString()
     url = "https://#{info.username}.typeform.com/app/form/submit/#{info.id}"
     @addHeader('Content-Type', 'application/json')
     proxyTypeform.call @, url,
       method: 'POST'
       data: data
-      # form: strData
+  
+  'forms/:id/start-submission': post: (data) ->
+    info = getRefererInfo.call(@)
+    url = "https://#{info.username}.typeform.com/forms/#{info.id}/start-submission"
+    @addHeader('Content-Type', 'application/json')
+    proxyTypeform.call @, url,
+      method: 'POST'
+      data: data
+  
+  'forms/:id/complete-submission': post: (data) ->
+    info = getRefererInfo.call(@)
+    url = "https://#{info.username}.typeform.com/forms/#{info.id}/complete-submission"
+    @addHeader('Content-Type', 'application/json')
+    proxyTypeform.call @, url,
+      method: 'POST'
+      data: data
 
   'bundles/quickyformapp/js/build/attributionUtil.js': -> scriptProxy.apply(@, arguments)
   'bundles/quickyformapp/js/build/trackingClient.js': -> scriptProxy.apply(@, arguments)
@@ -94,3 +110,9 @@ getRefererInfo = ->
   unless match
     throw new Meteor.Error "Could not parse referer: #{referer}"
   {username: match[1], id: match[2]}
+
+serializeQuery = (query) ->
+  params = new URLSearchParams()
+  _.each query, (value, param) ->
+    params.set(param, value)
+  params.toString()

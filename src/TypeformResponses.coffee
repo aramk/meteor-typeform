@@ -84,4 +84,3 @@ _.extend TypeformResponses,
       catch err
         Logger.error('Failed to insert response', response, err)
     Logger.info 'Created', ids.length, 'Typeform responses'
-
