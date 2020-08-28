@@ -64,11 +64,11 @@ _.extend TypeformResponses,
       data = Promises.runSync -> Typeform.getData typeformId, options
     catch e
       Logger.error(e)
-      return
+      return 0
     responses = options.getResponses(data, options)
     if _.isEmpty(responses)
       Logger.info 'No responses to sync'
-      return
+      return 0
     Logger.info "Syncing #{responses.length} responses..."
     # TODO(aramk) We still need to run sanitization and validation from collection2 so not batch
     # inserting.
@@ -84,3 +84,4 @@ _.extend TypeformResponses,
       catch err
         Logger.error('Failed to insert response', response, err)
     Logger.info 'Created', ids.length, 'Typeform responses'
+    return ids.length
