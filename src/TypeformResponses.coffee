@@ -113,7 +113,6 @@ _.extend TypeformResponses,
           {$set: Objects.flattenProperties(response)}
         )
         responseId = TypeformResponses.findOne(selector)
-        console.log('>>> responseId', responseId)
         ids.push(responseId)
       catch err
         Logger.error('Failed to insert response', response, err)
