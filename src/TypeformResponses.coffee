@@ -9,19 +9,21 @@ schema =
   token:
     type: String
     index: true
+    # This is blank for preliminary responses until a sync populates it.
+    optional: true
     # TODO(aramk) This isn't working, and it might cause issues with soft removal.
     # unique: true
+  # The user who submitted the typeform.
+  userId:
+    type: String
+    index: true
+    optional: true
   'dates.start':
     type: Date
     index: true
   'dates.finish':
     type: Date
     index: true
-  # The user who submitted the typeform.
-  userId:
-    type: String
-    index: true
-    optional: true
   # The raw data from the response.
   data:
     type: Object
@@ -35,12 +37,32 @@ TypeformResponses.allow
 
 _.extend TypeformResponses,
 
-  getLatest: -> TypeformResponses.find({}, {sort: 'dates.finish': -1, limit: 1}).fetch()[0]
+  getLatest: -> TypeformResponses.find({token: {$exists: true}}, {sort: 'dates.finish': -1, limit: 1}).fetch()[0]
 
 return unless Meteor.server
 
 _.extend TypeformResponses,
-  
+
+  init: (typeformId, userId, modifier = {}) ->
+    date = new Date()
+    modifier = Setter.merge(Objects.flattenProperties({
+      formId: typeformId
+      userId: userId
+      dates:
+        start: date
+        finish: date
+      data: {}
+    }), modifier)
+    TypeformResponses.upsert(
+      {
+        formId: typeformId
+        userId: userId
+        token: {$exists: false}
+      }
+      {
+        $set: modifier
+      }
+    )
   sync: (typeformId, options) ->
     unless typeformId then throw new Meteor.Error('No typeform ID provided')
 
@@ -80,7 +102,19 @@ _.extend TypeformResponses,
       # Add userId if available
       response.userId ?= response.data?.hidden?.user_id
       try
-        ids.push TypeformResponses.insert(response)
+        # Fill in the results into the preliminary response.
+        selector =
+          formId: typeformId
+          token: {$exists: false}
+        if response.userId?
+          selector.userId = response.userId
+        TypeformResponses.upsert(
+          selector
+          {$set: Objects.flattenProperties(response)}
+        )
+        responseId = TypeformResponses.findOne(selector)
+        console.log('>>> responseId', responseId)
+        ids.push(responseId)
       catch err
         Logger.error('Failed to insert response', response, err)
     Logger.info 'Created', ids.length, 'Typeform responses'
