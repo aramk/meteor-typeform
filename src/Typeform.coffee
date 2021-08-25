@@ -72,6 +72,23 @@ Typeform =
     
     df.promise
 
+  getForm: (id) ->
+    unless id? then return Q.reject('ID not provided')
+
+    accessToken = @_getAccessToken()
+    unless accessToken? then return Q.reject('Access token not provided')
+
+    url = Paths.join(@_config.dataUrlPrefix, id)
+    Logger.debug 'Getting typeform form', url, params
+    params = {}
+    df = Q.defer()
+    response = HTTP.get url,
+      params: params
+      headers:
+        authorization: "bearer #{accessToken}"
+    , Promises.toCallback(df)
+    @_handleHttpResponse(df, 'querying typeform data')
+
   _getDataUrl: (id) -> Paths.join(@_config.dataUrlPrefix, id, 'responses')
 
   _getAccessToken: -> Meteor.settings?.typeform?.accessToken
