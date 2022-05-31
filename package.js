@@ -1,7 +1,7 @@
 // Meteor package definition.
 Package.describe({
   name: 'aramk:typeform',
-  version: '1.0.0',
+  version: '1.1.0',
   summary: 'Adapter for typeform.io.',
   git: 'https://github.com/aramk/meteor-typeform.git'
 });
@@ -15,7 +15,7 @@ Package.onUse(function (api) {
     'underscore',
     'aramk:q@1.0.1_1',
     'urbanetic:utility@2.0.1',
-    'urbanetic:bismuth-utility@1.0.1',
+    'urbanetic:bismuth-utility@2.0.0',
     'cfs:http-methods@0.0.30',
   ], ['client', 'server']);
   api.export([
