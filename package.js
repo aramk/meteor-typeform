@@ -14,8 +14,8 @@ Package.onUse(function (api) {
     'templating',
     'underscore',
     'aramk:q@1.0.1_1',
-    'urbanetic:utility@2.0.1',
-    'urbanetic:bismuth-utility@2.0.0',
+    'urbanetic:utility@3.0.0',
+    'urbanetic:bismuth-utility@3.0.0',
     'cfs:http-methods@0.0.30',
   ], ['client', 'server']);
   api.export([
